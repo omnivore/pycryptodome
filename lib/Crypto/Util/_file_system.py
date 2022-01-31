@@ -29,6 +29,7 @@
 # ===================================================================
 
 import os
+import sys
 
 
 def pycryptodome_filename(dir_comps, filename):
@@ -41,9 +42,23 @@ def pycryptodome_filename(dir_comps, filename):
     filename : string
         The filename (inclusing extension) in the target directory.
     """
-
     if dir_comps[0] != "Crypto":
         raise ValueError("Only available for modules under 'Crypto'")
+
+    _, ext = os.path.splitext(filename)
+    print("ext: {}".format(ext))
+    print("frozen: {}".format(hasattr(sys, 'frozen')))
+    if hasattr(sys, 'frozen') and ext == ".pyd":
+        # We're running from a py2exe installation - pyd files can't be loaded from within the zip.
+        root_lib = os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
+        filename = ".".join(dir_comps)
+
+        print("root_lib: {}".format(root_lib))
+        print("dir_comps: {}".format(dir_comps))
+        print("Loading file: {}".format(os.path.join(root_lib, *dir_comps)))
+
+        print("Returning: {}".format(os.path.join(root_lib, filename)))
+        return os.path.join(root_lib, filename)
 
     dir_comps = list(dir_comps[1:]) + [filename]
 
