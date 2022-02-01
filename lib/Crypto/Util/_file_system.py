@@ -51,6 +51,7 @@ def pycryptodome_filename(dir_comps, filename):
     if hasattr(sys, 'frozen') and ext == ".pyd":
         # We're running from a py2exe installation - pyd files can't be loaded from within the zip.
         root_lib = os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
+        dir_comps.append(filename)
         filename = ".".join(dir_comps)
 
         print("root_lib: {}".format(root_lib))
