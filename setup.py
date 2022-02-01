@@ -480,6 +480,7 @@ with open(os.path.join("lib", package_root, "__init__.py")) as init_root:
             version_tuple = eval(line.split("=")[1])
 
 version_string = ".".join([str(x) for x in version_tuple])
+version_string = "{}+py2exe-patch".format(version_string)
 
 setup(
     name=project_name,
